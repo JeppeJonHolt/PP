@@ -1,0 +1,8 @@
+#lang scheme
+(define (func x)
+  (*x 3))
+
+(define (derivative f)
+  (lambda(x))
+      )
+)

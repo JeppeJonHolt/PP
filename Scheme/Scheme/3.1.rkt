@@ -1,0 +1,25 @@
+#lang scheme
+(define (sendKurt message obj . par)
+  (let ((method (obj message)))
+    (apply method par)))
+
+(define (PointRangeAdd lst)
+    (cond
+      ((null? (cdr lst)) (car lst))
+      (else (sendKurt 'add (car lst)(PointRangeAdd (cdr lst))))))
+
+(define (point x y)
+  (letrec ((getx    (lambda () x))
+           (gety    (lambda () y))
+           (add     (lambda (p) 
+                      (point 
+                       (+ x (sendKurt 'getx p))
+                       (+ y (sendKurt 'gety p)))))
+           (type-of (lambda () 'point))
+          )
+    (lambda (message)
+      (cond ((eq? message 'getx) getx)
+            ((eq? message 'gety) gety)
+            ((eq? message 'add)  add)
+            ((eq? message 'type-of) type-of)
+            (else (error "Message not understood"))))))
